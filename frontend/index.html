@@ -174,9 +174,9 @@
   <script>
     const choices = ['rock', 'paper', 'scissors'];
     const images = {
-      rock: '<img src="../fist.png" alt="Rock" style="width:32px;vertical-align:middle;"> Rock',
-      paper: '<img src="../peace.png" alt="Paper" style="width:32px;vertical-align:middle;"> Paper',
-      scissors: '<img src="../scissors.png" alt="Scissors" style="width:32px;vertical-align:middle;"> Scissors'
+      rock: '<img src="fist.png" alt="Rock" style="width:32px;vertical-align:middle;"> Rock',
+      paper: '<img src="peace.png" alt="Paper" style="width:32px;vertical-align:middle;"> Paper',
+      scissors: '<img src="scissors.png" alt="Scissors" style="width:32px;vertical-align:middle;"> Scissors'
     };
 
     const gameContainer = document.getElementById('choices');
@@ -220,7 +220,7 @@
         const div = document.createElement('div');
         div.classList.add('choice');
         div.setAttribute('data-choice', choice);
-        div.innerHTML = `<img src="../${imgMap[choice]}" alt="${choice}">`;
+        div.innerHTML = `<img src="${imgMap[choice]}" alt="${choice}">`;
         div.addEventListener('click', () => handleChoice(choice));
         gameContainer.appendChild(div);
       });
