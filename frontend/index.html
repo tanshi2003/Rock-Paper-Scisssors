@@ -298,6 +298,10 @@
     let playerName = 'You';
     let friend1 = 'Player 1';
     let friend2 = 'Player 2';
+    let previousPlayerName = '';
+let previousFriend1 = '';
+let previousFriend2 = '';
+
     function chooseMode(modeChoice) {
       document.getElementById('landing').style.display = 'none';
       if (modeChoice === 'computer') {
@@ -309,26 +313,48 @@
     }
 
     function setPlayerNameAndStart() {
-      const input = document.getElementById('player-name');
-      playerName = input.value.trim() ? input.value.trim() : 'You';
-      document.getElementById('user-label').textContent = playerName;
-      document.getElementById('comp-label').textContent = 'Computer';
-      document.getElementById('name-section').style.display = 'none';
-      document.getElementById('game-mode').style.display = 'flex';
-      startVsComputer();
-    }
+  const input = document.getElementById('player-name');
+  const currentName = input.value.trim() ? input.value.trim() : 'You';
 
+  if (currentName !== previousPlayerName) {
+    userScore = 0;
+    computerScore = 0;
+    document.getElementById('user-score').textContent = userScore;
+    document.getElementById('computer-score').textContent = computerScore;
+  }
+
+  previousPlayerName = currentName;
+  playerName = currentName;
+
+  document.getElementById('user-label').textContent = playerName;
+  document.getElementById('comp-label').textContent = 'Computer';
+  document.getElementById('name-section').style.display = 'none';
+  document.getElementById('game-mode').style.display = 'flex';
+  startVsComputer();
+}
     function setFriendNamesAndStart() {
-      const p1 = document.getElementById('friend-player1').value.trim();
-      const p2 = document.getElementById('friend-player2').value.trim();
-      friend1 = p1 ? p1 : 'Player 1';
-      friend2 = p2 ? p2 : 'Player 2';
-      document.getElementById('user-label').textContent = friend1;
-      document.getElementById('comp-label').textContent = friend2;
-      document.getElementById('friend-names').style.display = 'none';
-      document.getElementById('game-mode').style.display = 'flex';
-      toggleFriendMode();
-    }
+  const p1 = document.getElementById('friend-player1').value.trim() || 'Player 1';
+  const p2 = document.getElementById('friend-player2').value.trim() || 'Player 2';
+
+  if (p1 !== previousFriend1 || p2 !== previousFriend2) {
+    userScore = 0;
+    computerScore = 0;
+    document.getElementById('user-score').textContent = userScore;
+    document.getElementById('computer-score').textContent = computerScore;
+  }
+
+  previousFriend1 = p1;
+  previousFriend2 = p2;
+
+  friend1 = p1;
+  friend2 = p2;
+
+  document.getElementById('user-label').textContent = friend1;
+  document.getElementById('comp-label').textContent = friend2;
+  document.getElementById('friend-names').style.display = 'none';
+  document.getElementById('game-mode').style.display = 'flex';
+  toggleFriendMode();
+}
 
     function toggleFriendMode() {
       mode = 'friend';
@@ -396,7 +422,23 @@
           const p2 = friendChoices['player2'];
           userChoiceEl.innerHTML = `${friend1} chose: ${images[p1]}`;
           computerChoiceEl.innerHTML = `${friend2} chose: ${images[p2]}`;
-          resultEl.textContent = getWinnerName(p1, p2);
+          // Determine winner and update scores
+          let winner = '';
+          if (p1 === p2) {
+            resultEl.textContent = "It's a Draw! ✨";
+          } else if (
+            (p1 === 'rock' && p2 === 'scissors') ||
+            (p1 === 'scissors' && p2 === 'paper') ||
+            (p1 === 'paper' && p2 === 'rock')
+          ) {
+            resultEl.textContent = `${friend1} Wins! 🎉`;
+            userScore++;
+            document.getElementById('user-score').textContent = userScore;
+          } else {
+            resultEl.textContent = `${friend2} Wins! 😈`;
+            computerScore++;
+            document.getElementById('computer-score').textContent = computerScore;
+          }
           playAgainBtn.style.display = 'inline-block';
           friendTurn = 'player1';
         }
