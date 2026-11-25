@@ -2,481 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rock Paper Scissors Game</title>
-  <link rel="icon" type="image/png" href="rock-paper-scissors.png">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#161a20">
+  <meta name="description" content="Rock Paper Scissors. Play the computer or challenge a friend on the same device.">
+  <title>Rock Paper Scissors</title>
+  <link rel="icon" href="rock-paper-scissors.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(135deg, #232526 0%, #414345 100%);
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      color: #fff;
-    }
-
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 8px #000;
-    }
-
-    .choices {
-      display: flex;
-      gap: 30px;
-    }
-
-    .choice {
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid #fff;
-      border-radius: 15px;
-      padding: 15px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .choice:hover {
-      transform: scale(1.1);
-    }
-
-    .choice img {
-      width: 100px;
-      height: 100px;
-    }
-
-    .results {
-      margin-top: 30px;
-      font-size: 1.5rem;
-      text-align: center;
-    }
-
-    .play-again, .friend-btn {
-      margin-top: 20px;
-      padding: 14px 38px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
-      color: #fff;
-      font-family: 'Orbitron', monospace;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .play-again:hover, .friend-btn:hover {
-      background: linear-gradient(90deg, #0072ff 0%, #00c6ff 100%);
-      transform: scale(1.05);
-    }
-
-    #game-mode {
-      display: flex;
-      gap: 32px;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-
-    #friend-section {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    #friend-section select {
-      font-size: 1rem;
-      padding: 5px;
-      border-radius: 8px;
-    }
-    .scoreboard {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      display: flex;
-      gap: 18px;
-      background: rgba(0,0,0,0.18);
-      border-radius: 12px;
-      padding: 10px 22px 10px 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      font-size: 1rem;
-      z-index: 100;
-      align-items: center;
-      min-width: 160px;
-      color: #fff;
-      border: 1px solid #3a3a3a;
-      transition: top 0.2s, right 0.2s, width 0.2s;
-    }
-    .scoreboard div {
-      text-align: center;
-      font-family: 'Orbitron', monospace;
-    }
-    .score-user span, .score-comp span {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #00c6ff;
-      margin-top: 2px;
-      display: inline-block;
-    }
-    .score-comp span {
-      color: #ff7eb3;
-    }
-        @media (max-width: 600px) {
-      h1 {
-        font-size: 1.3rem;
-        margin-bottom: 10px;
-      }
-      .choices {
-        gap: 10px;
-      }
-      .choice img {
-        width: 60px;
-        height: 60px;
-      }
-      .choice {
-        padding: 7px;
-        border-radius: 10px;
-      }
-      .results {
-        font-size: 1rem;
-        margin-top: 18px;
-      }
-      .play-again, .friend-btn {
-        padding: 8px 18px;
-        font-size: 0.95rem;
-        margin-top: 12px;
-      }
-      #game-mode {
-        gap: 10px;
-        flex-direction: column;
-        margin-bottom: 6px;
-      }
-      #name-section {
-        position: static !important;
-        width: 100vw;
-        justify-content: center;
-        align-items: center;
-        padding: 0 8px;
-        margin-bottom: 4px;
-        background: rgba(0,0,0,0.10);
-        border-radius: 0 0 10px 10px;
-        z-index: 3;
-      }
-      #name-section label, #name-section input, #name-section button {
-        font-size: 0.95rem;
-      }
-      #name-section input {
-        min-width: 0;
-        width: 70vw;
-        max-width: 220px;
-        text-align: center;
-        font-family: 'Orbitron', monospace;
-      }
-      #friend-names {
-        align-items: center !important;
-      }
-      #friend-names input {
-        width: 70vw;
-        max-width: 220px;
-        text-align: center;
-        font-family: 'Orbitron', monospace;
-      }
-      .scoreboard {
-        position: fixed;
-        top: 8px;
-        right: 0;
-        left: 0;
-        width: 100vw;
-        min-width: 0;
-        gap: 8px;
-        font-size: 0.85rem;
-        background: rgba(0,0,0,0.18);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        border: 1px solid #3a3a3a;
-        border-radius: 0 0 12px 12px;
-        justify-content: flex-end;
-        padding: 4px 8px 4px 0;
-        z-index: 100;
-      }
-      .score-user span, .score-comp span {
-        font-size: 0.95rem;
-      }
-      #friend-section {
-        gap: 5px;
-        margin-top: 10px;
-      }
-      #friend-section select {
-        font-size: 0.95rem;
-        padding: 3px;
-      }
-    }
+    :root{--ink:#f5f4ef;--muted:#a5a9b0;--bg:#161a20;--card:#20252d;--card2:#262c35;--border:#363d47;--accent:#d7f36a;--accent-ink:#202515;--pink:#e8a4b8;--green:#bde6a5;--red:#e9a1a1}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif;padding:26px 18px 40px}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.wrap{max-width:820px;margin:0 auto}.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:54px}.identity{display:flex;align-items:center;gap:11px}.identity img{width:36px;height:36px;object-fit:contain}.identity small{display:block;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}.identity strong{display:block;font:600 15px "Space Grotesk",sans-serif;letter-spacing:.3px}.sound{border:1px solid var(--border);background:transparent;color:var(--muted);padding:9px 12px;border-radius:9px;font-size:12px}.sound:hover{color:var(--ink);border-color:#777}.intro{margin-bottom:26px}.intro .kicker{font-size:11px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;font-weight:700}.intro h1{font:700 clamp(34px,7vw,62px)/1.02 "Space Grotesk",sans-serif;letter-spacing:-2.8px;margin:12px 0 14px;max-width:680px}.intro h1 em{font-style:normal;color:var(--accent)}.intro p{margin:0;color:var(--muted);font-size:15px}.card{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:clamp(20px,4vw,30px)}.choose-heading{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:17px}.choose-heading strong{font:600 16px "Space Grotesk",sans-serif}.choose-heading span{font-size:12px;color:var(--muted)}.modes{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mode{display:flex;gap:14px;align-items:center;text-align:left;color:var(--ink);border:1px solid var(--border);background:var(--card2);border-radius:13px;padding:17px 16px;transition:border-color .16s,background .16s,transform .16s}.mode:hover{border-color:#7e8b5c;background:#2a3038;transform:translateY(-2px)}.mode .symbol{font-size:25px;width:42px;height:42px;display:grid;place-items:center;background:#171c22;border-radius:10px;flex:0 0 auto}.mode strong{display:block;font-size:14px;margin-bottom:4px}.mode small{color:var(--muted);font-size:12px;line-height:1.4;display:block}.names{max-width:430px;margin:24px auto 0}.field{margin-bottom:13px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}.field input{width:100%;background:#171c22;border:1px solid var(--border);border-radius:9px;padding:12px;color:var(--ink)}.start,.next{background:var(--accent);color:var(--accent-ink);border:0;border-radius:9px;padding:12px 18px;font-weight:700}.start{width:100%;margin-top:3px}.start:hover,.next:hover{filter:brightness(1.05)}.hidden{display:none!important}.game-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:21px}.mode-label{font-size:10px;letter-spacing:1.7px;color:var(--accent);font-weight:700}.game-top h2{font:600 17px "Space Grotesk",sans-serif;margin:6px 0}.round-note{color:var(--muted);font-size:12px}.menu{background:none;border:1px solid var(--border);border-radius:9px;color:var(--muted);padding:9px 12px;font-size:12px}.menu:hover{color:var(--ink)}.scorebar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:#171c22;border:1px solid var(--border);border-radius:13px;padding:16px;margin-bottom:20px}.score{text-align:center;min-width:0}.score label{display:block;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.score b{font:600 29px "Space Grotesk",sans-serif;display:block;margin-top:4px}.score:first-child b{color:var(--accent)}.score:last-child b{color:var(--pink)}.vs{font-size:10px;color:#777e88;letter-spacing:1.5px;padding:0 10px}.banner{padding:12px;text-align:center;background:#292f38;border-radius:9px;color:var(--accent);font-size:13px;font-weight:700;margin-bottom:17px}.moves{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.move{border:1px solid var(--border);background:#272d35;border-radius:13px;color:var(--ink);padding:16px 10px;transition:transform .16s,border-color .16s}.move:hover:not(:disabled){border-color:#929f68;transform:translateY(-3px)}.move:disabled{opacity:.45;cursor:not-allowed}.move img{display:block;width:clamp(54px,10vw,78px);height:clamp(54px,10vw,78px);object-fit:contain;margin:0 auto 8px}.move span{font-size:12px;font-weight:700;letter-spacing:.5px}.result{margin-top:20px;border:1px solid var(--border);border-radius:13px;padding:18px;background:#171c22;text-align:center}.picks{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}.picked{color:var(--muted);font-size:11px}.picked img{display:block;width:50px;height:50px;object-fit:contain;margin:0 auto 5px}.picked strong{display:block;color:var(--ink);font-size:12px}.outcome{font:600 19px "Space Grotesk",sans-serif;margin:17px 0 0}.outcome.win{color:var(--green)}.outcome.loss{color:var(--red)}.outcome.draw{color:var(--accent)}.result-actions{margin-top:15px}.hint{font-size:11px;color:var(--muted);line-height:1.5;text-align:center;margin:16px 0 0}.footer{color:#7c838b;font-size:11px;text-align:center;margin-top:28px}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:#2a3038;border:1px solid var(--border);border-radius:9px;padding:11px 15px;font-size:12px;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:560px){body{padding:19px 13px 28px}.header{margin-bottom:36px}.intro h1{letter-spacing:-1.8px}.intro p{font-size:13px}.choose-heading{align-items:flex-start;flex-direction:column;gap:5px}.modes{grid-template-columns:1fr}.mode{padding:14px}.card{padding:18px;border-radius:14px}.scorebar{padding:13px 8px}.score b{font-size:25px}.score label{font-size:11px}.vs{padding:0 7px}.move{padding:12px 5px}.game-top{align-items:flex-start}.menu{padding:8px 10px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
   </style>
 </head>
 <body>
-  <div id="landing" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;min-height:60vh;">
-    <h1>Rock Paper Scissors</h1>
-    <div style="display:flex;gap:18px;">
-      <button class="friend-btn" onclick="chooseMode('computer')">Play vs Computer</button>
-      <button class="friend-btn" onclick="chooseMode('friend')">Play with Friend</button>
-    </div>
-  </div>
-    <div id="name-section" style="display:none;flex-direction:column;align-items:center;gap:6px;margin-top:18px;">
-    <label for="player-name" style="font-size:1rem;">👤 Enter your name</label>
-    <input id="player-name" type="text" placeholder="Your name" style="padding:4px 10px;border-radius:7px;border:1px solid #444;font-size:1rem;outline:none;min-width:90px;width:220px;text-align:center;font-family:'Orbitron',monospace;">
-    <button onclick="setPlayerNameAndStart()" style="padding:4px 12px;border-radius:7px;border:none;background:#00c6ff;color:#fff;font-family:'Orbitron',monospace;cursor:pointer;font-size:1rem;margin-top:6px;align-self:center;">Start</button>
-  </div>
-  <div id="friend-names" style="display:none;flex-direction:column;align-items:center;gap:6px;margin-top:18px;">
-    <label for="friend-player1" style="font-size:1rem;">👤 Player 1 Name</label>
-    <input id="friend-player1" type="text" placeholder="Player 1" style="padding:4px 10px;border-radius:7px;border:1px solid #444;font-size:1rem;outline:none;min-width:90px;width:220px;text-align:center;font-family:'Orbitron',monospace;">
-    <label for="friend-player2" style="font-size:1rem;">👥 Player 2 Name</label>
-    <input id="friend-player2" type="text" placeholder="Player 2" style="padding:4px 10px;border-radius:7px;border:1px solid #444;font-size:1rem;outline:none;min-width:90px;width:220px;text-align:center;font-family:'Orbitron',monospace;">
-    <button onclick="setFriendNamesAndStart()" style="padding:4px 12px;border-radius:7px;border:none;background:#00c6ff;color:#fff;font-family:'Orbitron',monospace;cursor:pointer;font-size:1rem;margin-top:6px;align-self:center;">Start</button>
-  </div>
-  <div id="game-mode" style="display:none;">
-    <button class="friend-btn" onclick="startVsComputer()">Play vs Computer</button>
-    <button class="friend-btn" onclick="toggleFriendMode()">Play with Friend</button>
-  </div>
-
-  <div class="choices" id="choices"></div>
-  <!-- <div id="friend-names" style="display:none;flex-direction:column;align-items:flex-start;gap:6px;margin-top:18px;">
-    <label for="friend-player1" style="font-size:1rem;">👤 Player 1 Name</label>
-    <input id="friend-player1" type="text" placeholder="Player 1" style="padding:4px 10px;border-radius:7px;border:1px solid #444;font-size:1rem;outline:none;min-width:90px;">
-    <label for="friend-player2" style="font-size:1rem;">👥 Player 2 Name</label>
-    <input id="friend-player2" type="text" placeholder="Player 2" style="padding:4px 10px;border-radius:7px;border:1px solid #444;font-size:1rem;outline:none;min-width:90px;">
-    <button onclick="setFriendNames()" style="padding:4px 12px;border-radius:7px;border:none;background:#00c6ff;color:#fff;font-family:'Orbitron',monospace;cursor:pointer;font-size:1rem;margin-top:6px;align-self:center;">Start</button>
-  </div> -->
-  <div id="friend-section" style="display:none;"></div>
-
-  <div class="scoreboard">
-    <div class="score-user"><span id="user-label">You</span><br><span id="user-score">0</span></div>
-    <div class="score-comp"><span id="comp-label">Computer</span><br><span id="computer-score">0</span></div>
-  </div>
-  <div class="results">
-    <p id="user-choice"></p>
-    <p id="computer-choice"></p>
-    <p id="result"></p>
-  </div>
-  <button class="play-again" onclick="resetGame()" style="display:none;">Play Again</button>
-
-  <script>
-    const choices = ['rock', 'paper', 'scissors'];
-    const images = {
-      rock: '<img src="fist.png" alt="Rock" style="width:32px;vertical-align:middle;"> Rock',
-      paper: '<img src="peace.png" alt="Paper" style="width:32px;vertical-align:middle;"> Paper',
-      scissors: '<img src="scissors.png" alt="Scissors" style="width:32px;vertical-align:middle;"> Scissors'
-    };
-
-    const gameContainer = document.getElementById('choices');
-    const userChoiceEl = document.getElementById('user-choice');
-    const computerChoiceEl = document.getElementById('computer-choice');
-    const resultEl = document.getElementById('result');
-    const playAgainBtn = document.querySelector('.play-again');
-    const gameMode = document.getElementById('game-mode');
-    const friendSection = document.getElementById('friend-section');
-    // Remove playerSelect, not needed anymore
-
-    let mode = ''; // 'computer' or 'friend'
-    let friendChoices = {};
-    let userScore = 0;
-    let computerScore = 0;
-    let playerName = 'You';
-    let friend1 = 'Player 1';
-    let friend2 = 'Player 2';
-    let previousPlayerName = '';
-let previousFriend1 = '';
-let previousFriend2 = '';
-
-    function chooseMode(modeChoice) {
-      document.getElementById('landing').style.display = 'none';
-      if (modeChoice === 'computer') {
-        document.getElementById('name-section').style.display = 'flex';
-      } else {
-        document.getElementById('friend-names').style.display = 'flex';
-      }
-      mode = modeChoice;
-    }
-
-    function setPlayerNameAndStart() {
-  const input = document.getElementById('player-name');
-  const currentName = input.value.trim() ? input.value.trim() : 'You';
-
-  if (currentName !== previousPlayerName) {
-    userScore = 0;
-    computerScore = 0;
-    document.getElementById('user-score').textContent = userScore;
-    document.getElementById('computer-score').textContent = computerScore;
-  }
-
-  previousPlayerName = currentName;
-  playerName = currentName;
-
-  document.getElementById('user-label').textContent = playerName;
-  document.getElementById('comp-label').textContent = 'Computer';
-  document.getElementById('name-section').style.display = 'none';
-  document.getElementById('game-mode').style.display = 'flex';
-  startVsComputer();
-}
-    function setFriendNamesAndStart() {
-  const p1 = document.getElementById('friend-player1').value.trim() || 'Player 1';
-  const p2 = document.getElementById('friend-player2').value.trim() || 'Player 2';
-
-  if (p1 !== previousFriend1 || p2 !== previousFriend2) {
-    userScore = 0;
-    computerScore = 0;
-    document.getElementById('user-score').textContent = userScore;
-    document.getElementById('computer-score').textContent = computerScore;
-  }
-
-  previousFriend1 = p1;
-  previousFriend2 = p2;
-
-  friend1 = p1;
-  friend2 = p2;
-
-  document.getElementById('user-label').textContent = friend1;
-  document.getElementById('comp-label').textContent = friend2;
-  document.getElementById('friend-names').style.display = 'none';
-  document.getElementById('game-mode').style.display = 'flex';
-  toggleFriendMode();
-}
-
-    function toggleFriendMode() {
-      mode = 'friend';
-      gameMode.style.display = 'none';
-      gameContainer.innerHTML = '';
-      friendSection.style.display = 'none';
-      document.getElementById('name-section').style.display = 'none';
-      renderChoices();
-      // No dropdown, use alert for switching
-    }
-
-    function startVsComputer() {
-      mode = 'computer';
-      gameMode.style.display = 'none';
-      gameContainer.innerHTML = '';
-      document.getElementById('name-section').style.display = 'none';
-      renderChoices();
-    }
-
-    function renderChoices() {
-      const imgMap = { rock: 'fist.png', paper: 'peace.png', scissors: 'scissors.png' };
-      choices.forEach(choice => {
-        const div = document.createElement('div');
-        div.classList.add('choice');
-        div.setAttribute('data-choice', choice);
-        div.innerHTML = `<img src="${imgMap[choice]}" alt="${choice}">`;
-        div.addEventListener('click', () => handleChoice(choice));
-        gameContainer.appendChild(div);
-      });
-    }
-
-    let friendTurn = 'player1';
-    async function handleChoice(choice) {
-      if (mode === 'computer') {
-        const response = await fetch('https://rps-backend-xkgc.onrender.com/play', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ choice })
-        });
-
-        const data = await response.json();
-        userChoiceEl.innerHTML = `${playerName} chose: ${images[data.yourChoice]}`;
-        computerChoiceEl.innerHTML = `Computer chose: ${images[data.computerChoice]}`;
-        let msg = '';
-        if (data.result === 'win') {
-          msg = 'You Win! 🎉';
-          userScore++;
-        } else if (data.result === 'lose') {
-          msg = 'Computer Wins! 😈';
-          computerScore++;
-        } else {
-          msg = "It's a Draw! ✨";
-        }
-        resultEl.textContent = msg;
-        document.getElementById('user-score').textContent = userScore;
-        document.getElementById('computer-score').textContent = computerScore;
-        playAgainBtn.style.display = 'inline-block';
-      } else if (mode === 'friend') {
-        friendChoices[friendTurn] = choice;
-        if (friendTurn === 'player1') {
-          alert(`${friend2}'s turn`);
-          friendTurn = 'player2';
-        } else {
-          const p1 = friendChoices['player1'];
-          const p2 = friendChoices['player2'];
-          userChoiceEl.innerHTML = `${friend1} chose: ${images[p1]}`;
-          computerChoiceEl.innerHTML = `${friend2} chose: ${images[p2]}`;
-          // Determine winner and update scores
-          let winner = '';
-          if (p1 === p2) {
-            resultEl.textContent = "It's a Draw! ✨";
-          } else if (
-            (p1 === 'rock' && p2 === 'scissors') ||
-            (p1 === 'scissors' && p2 === 'paper') ||
-            (p1 === 'paper' && p2 === 'rock')
-          ) {
-            resultEl.textContent = `${friend1} Wins! 🎉`;
-            userScore++;
-            document.getElementById('user-score').textContent = userScore;
-          } else {
-            resultEl.textContent = `${friend2} Wins! 😈`;
-            computerScore++;
-            document.getElementById('computer-score').textContent = computerScore;
-          }
-          playAgainBtn.style.display = 'inline-block';
-          friendTurn = 'player1';
-        }
-      }
-    }
-
-    function getWinnerName(p1, p2) {
-      if (p1 === p2) return "It's a Draw! ✨";
-      if (
-        (p1 === 'rock' && p2 === 'scissors') ||
-        (p1 === 'scissors' && p2 === 'paper') ||
-        (p1 === 'paper' && p2 === 'rock')
-      ) {
-        return `${friend1} Wins! 🎉`;
-      } else {
-        return `${friend2} Wins! 😈`;
-      }
-    }
-
-    function resetGame() {
-      userChoiceEl.textContent = '';
-      computerChoiceEl.textContent = '';
-      resultEl.textContent = '';
-      playAgainBtn.style.display = 'none';
-      gameContainer.innerHTML = '';
-      gameMode.style.display = 'none';
-      friendSection.style.display = 'none';
-      document.getElementById('friend-names').style.display = 'none';
-      document.getElementById('name-section').style.display = 'none';
-      document.getElementById('landing').style.display = 'flex';
-      friendChoices = {};
-      friendTurn = 'player1';
-      // Optionally reset scores here if you want to reset scoreboard too:
-      // userScore = 0;
-      // computerScore = 0;
-      // document.getElementById('user-score').textContent = userScore;
-      // document.getElementById('computer-score').textContent = computerScore;
-    }
-  </script>
+  <main class="wrap">
+    <header class="header"><div class="identity"><img src="rock-paper-scissors.png" alt=""><div><small>Quick match</small><strong>ROCK / PAPER / SCISSORS</strong></div></div><button class="sound" id="sound" type="button" aria-pressed="true">Sound: on</button></header>
+    <section id="home">
+      <div class="intro"><div class="kicker">A timeless three-way standoff</div><h1>Pick your move.<br><em>Trust your gut.</em></h1><p>Just one more round. You know how this goes.</p></div>
+      <div class="card"><div class="choose-heading"><strong>Who are you playing?</strong><span>Choose a game mode</span></div><div class="modes"><button class="mode" data-mode="cpu"><span class="symbol">✦</span><span><strong>Against the computer</strong><small>Solo play, best of your luck</small></span></button><button class="mode" data-mode="friend"><span class="symbol">♟</span><span><strong>With a friend</strong><small>Same device, take turns</small></span></button></div>
+        <div id="name-form" class="names hidden"><div id="cpu-fields"><div class="field"><label for="name-cpu">Your name</label><input id="name-cpu" maxlength="20" placeholder="Player" autocomplete="nickname"></div></div><div id="friend-fields" class="hidden"><div class="field"><label for="name-a">Player one</label><input id="name-a" maxlength="20" placeholder="Player 1"></div><div class="field"><label for="name-b">Player two</label><input id="name-b" maxlength="20" placeholder="Player 2"></div></div><button class="start" id="start">Let's play</button></div>
+      </div>
+    </section>
+    <section id="game" class="card hidden" aria-live="polite">
+      <div class="game-top"><div><div class="mode-label" id="mode-label">SOLO</div><h2>Scoreboard</h2><div class="round-note" id="round-note">Choose a move.</div></div><button class="menu" id="menu">← Change mode</button></div>
+      <div class="scorebar"><div class="score"><label id="score-name-a">You</label><b id="score-a">0</b></div><div class="vs">VS</div><div class="score"><label id="score-name-b">Computer</label><b id="score-b">0</b></div></div>
+      <div class="banner" id="banner">Choose your move</div>
+      <div class="moves" id="moves"><button class="move" data-move="rock"><img src="fist.png" alt="Rock"><span>ROCK</span></button><button class="move" data-move="paper"><img src="peace.png" alt="Paper"><span>PAPER</span></button><button class="move" data-move="scissors"><img src="scissors.png" alt="Scissors"><span>SCISSORS</span></button></div>
+      <div id="result" class="result hidden"><div class="picks"><div class="picked" id="pick-a"></div><div class="vs">VS</div><div class="picked" id="pick-b"></div></div><div id="outcome" class="outcome"></div><div class="result-actions"><button class="next" id="next">Next round</button></div></div><p class="hint" id="hint">Keyboard shortcuts: 1 Rock · 2 Paper · 3 Scissors</p>
+    </section>
+    <footer class="footer">A little friendly rivalry never hurt.</footer>
+  </main><div id="toast" class="toast" role="status"></div>
+<script>
+(() => {
+  'use strict';
+  const moves=['rock','paper','scissors'];
+  const display={rock:'Rock',paper:'Paper',scissors:'Scissors'};
+  const images={rock:'fist.png',paper:'peace.png',scissors:'scissors.png'};
+  const el=id=>document.getElementById(id);
+  const game={mode:'',names:['You','Computer'],score:[0,0],round:1,friendTurn:0,picks:[],finished:false,sound:true};
+  let context=null,toastTimer;
+  function toast(message){el('toast').textContent=message;el('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el('toast').classList.remove('show'),2100);}
+  function tone(freq=440,duration=.08){if(!game.sound)return;try{context ||= new(window.AudioContext||window.webkitAudioContext)();if(context.state==='suspended')context.resume();const osc=context.createOscillator(),gain=context.createGain();osc.frequency.value=freq;gain.gain.setValueAtTime(.055,context.currentTime);gain.gain.exponentialRampToValueAtTime(.001,context.currentTime+duration);osc.connect(gain);gain.connect(context.destination);osc.start();osc.stop(context.currentTime+duration);}catch(e){/* audio is optional */}}
+  function screen(isGame){el('home').classList.toggle('hidden',isGame);el('game').classList.toggle('hidden',!isGame);}
+  function safeName(value,fallback){return value.trim().replace(/\s+/g,' ').slice(0,20)||fallback;}
+  function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  document.querySelectorAll('[data-mode]').forEach(btn=>btn.addEventListener('click',()=>{game.mode=btn.dataset.mode;el('name-form').classList.remove('hidden');el('cpu-fields').classList.toggle('hidden',game.mode!=='cpu');el('friend-fields').classList.toggle('hidden',game.mode!=='friend');el('start').textContent=game.mode==='cpu'?'Start game':'Start match';(game.mode==='cpu'?el('name-cpu'):el('name-a')).focus();}));
+  el('start').addEventListener('click',()=>{if(game.mode==='cpu'){game.names=[safeName(el('name-cpu').value,'You'),'Computer'];}else{const a=safeName(el('name-a').value,'Player 1'),b=safeName(el('name-b').value,'Player 2');if(a.toLowerCase()===b.toLowerCase()){toast('Players need different names.');return;}game.names=[a,b];}game.score=[0,0];game.round=1;game.friendTurn=0;el('mode-label').textContent=game.mode==='cpu'?'SOLO PLAY':'TWO PLAYERS';el('hint').textContent=game.mode==='cpu'?'Keyboard shortcuts: 1 Rock · 2 Paper · 3 Scissors':'Choices stay hidden until both players have picked.';updateScores();newRound();screen(true);});
+  function updateScores(){el('score-name-a').textContent=game.names[0];el('score-name-b').textContent=game.names[1];el('score-a').textContent=game.score[0];el('score-b').textContent=game.score[1];}
+  function newRound(){game.picks=[];game.finished=false;game.friendTurn=0;el('round-note').textContent='Round '+game.round+' · Choose your move';el('banner').textContent=game.mode==='cpu'?game.names[0]+', choose your move':game.names[0]+', choose first';el('moves').classList.remove('hidden');el('result').classList.add('hidden');el('moves').querySelectorAll('button').forEach(b=>b.disabled=false);}
+  function resultIndex(a,b){if(a===b)return -1;if((a==='rock'&&b==='scissors')||(a==='paper'&&b==='rock')||(a==='scissors'&&b==='paper'))return 0;return 1;}
+  function choose(move){if(game.finished||!moves.includes(move))return;tone(420,.055);if(game.mode==='cpu'){game.picks=[move,moves[Math.floor(Math.random()*3)]];finish();return;}if(game.friendTurn===0){game.picks[0]=move;game.friendTurn=1;el('moves').classList.add('hidden');el('result').classList.remove('hidden');el('pick-a').innerHTML='<strong>Choice locked</strong><span>Hidden from Player 2</span>';el('pick-b').innerHTML='<strong>Pass device</strong><span>Ready for '+esc(game.names[1])+'?</span>';el('outcome').textContent='Pass to '+game.names[1];el('outcome').className='outcome';el('next').textContent='Reveal Player 2 turn';el('banner').textContent='First choice locked';el('round-note').textContent='Pass the device to the next player';}else{game.picks[1]=move;finish();}}
+  function finish(){game.finished=true;const win=resultIndex(...game.picks);if(win!==-1)game.score[win]++;updateScores();const [a,b]=game.picks;el('pick-a').innerHTML='<img src="'+images[a]+'" alt="'+display[a]+'"><strong>'+esc(game.names[0])+'</strong><span>'+display[a]+'</span>';el('pick-b').innerHTML='<img src="'+images[b]+'" alt="'+display[b]+'"><strong>'+esc(game.names[1])+'</strong><span>'+display[b]+'</span>';el('outcome').textContent=win===-1?'Draw round':game.names[win]+' wins this round';el('outcome').className='outcome '+(win===-1?'draw':win===0?'win':'loss');el('banner').textContent=win===-1?'A draw. Again?':game.names[win]+' takes this round';el('round-note').textContent='Round '+game.round+' complete';el('moves').classList.add('hidden');el('result').classList.remove('hidden');el('next').textContent='Play next round';tone(win===-1?340:620,.16);}
+  el('moves').addEventListener('click',e=>{const b=e.target.closest('[data-move]');if(b&&!b.disabled)choose(b.dataset.move);});
+  el('next').addEventListener('click',()=>{if(game.mode==='friend'&&game.friendTurn===1&&!game.finished){el('result').classList.add('hidden');el('moves').classList.remove('hidden');el('banner').textContent=game.names[1]+', choose your move';el('round-note').textContent='Player 2 turn';el('hint').textContent='Only Player 2 should be looking now.';return;}game.round++;newRound();});
+  el('menu').addEventListener('click',()=>screen(false));el('sound').addEventListener('click',()=>{game.sound=!game.sound;el('sound').textContent='Sound: '+(game.sound?'on':'off');el('sound').setAttribute('aria-pressed',String(game.sound));if(game.sound)tone(500,.07);});
+  document.addEventListener('keydown',e=>{if(el('game').classList.contains('hidden')||e.target.matches('input'))return;if(['1','2','3'].includes(e.key))choose(moves[Number(e.key)-1]);if(e.key==='Escape')screen(false);});
+})();
+</script>
 </body>
 </html>

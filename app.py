@@ -1,36 +1,36 @@
+"""Optional API for the Rock Paper Scissors game."""
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import random
 
+
 app = Flask(__name__)
-CORS(app)  # Allow frontend requests from different port
+CORS(app)
+CHOICES = ("rock", "paper", "scissors")
 
-@app.route('/')
+
+def winner(player, computer):
+    if player == computer:
+        return "draw"
+    if (player, computer) in (("rock", "scissors"), ("paper", "rock"), ("scissors", "paper")):
+        return "win"
+    return "lose"
+
+
+@app.get("/")
 def home():
-    return "Flask RPS backend is running 🎮"
+    return jsonify({"message": "Rock Paper Scissors API is running", "endpoint": "POST /play"})
 
-@app.route('/play', methods=['POST'])
+
+@app.post("/play")
 def play():
-    data = request.get_json()
-    user_choice = data.get('choice')
-    options = ['rock', 'paper', 'scissors']
-    computer_choice = random.choice(options)
+    data = request.get_json(silent=True) or {}
+    choice = data.get("choice")
+    if choice not in CHOICES:
+        return jsonify({"error": "Invalid choice. Choose rock, paper, or scissors."}), 400
+    computer = random.choice(CHOICES)
+    return jsonify({"yourChoice": choice, "computerChoice": computer, "result": winner(choice, computer)})
 
-    if user_choice == computer_choice:
-        result = 'draw'
-    elif (user_choice == 'rock' and computer_choice == 'scissors') or \
-         (user_choice == 'paper' and computer_choice == 'rock') or \
-         (user_choice == 'scissors' and computer_choice == 'paper'):
-        result = 'win'
-    else:
-        result = 'lose'
-
-    return jsonify({
-        'yourChoice': user_choice,
-        'computerChoice': computer_choice,
-        'result': result
-    })
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
-
+    app.run(host="0.0.0.0", port=5000, debug=False)
