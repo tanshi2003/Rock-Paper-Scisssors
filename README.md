@@ -1,116 +1,143 @@
 # Rock Paper Scissors 🎮
 
-A small browser game with two modes: play against a randomly choosing computer or take turns with a friend on the same device.
+A simple, interactive Rock Paper Scissors game with two game modes. Play against the computer or challenge a friend on the same device.
 
-## Play online
+## 🎮 Play the Game
 
-After GitHub Pages is configured, the game can be played at:
+**[Play Rock Paper Scissors](https://tanshi2003.github.io/Rock-Paper-Scisssors/)**
 
-**https://tanshi2003.github.io/Rock-Paper-Scisssors/**
+## ✨ Features
 
-The browser game is self-contained. It does not require a Python server, API calls, or any JavaScript packages. The computer opponent runs in the browser, so it is playable as a static site.
+- **Play vs Computer:** Compete against a randomly generated computer move.
+- **2 Player Mode:** Play with a friend on the same device, with hidden moves until both players have chosen.
+- **Score Tracking:** Keep track of wins across rounds.
+- **Sound Effects:** Toggle game sounds on or off.
+- **Keyboard Controls:** Use `1`, `2`, and `3` to select Rock, Paper, and Scissors.
+- **Responsive Design:** Play on desktop or mobile devices.
+- **No Installation Required:** Runs directly in your browser.
 
-## Run locally
+## 🛠️ Tech Stack
 
-1. Clone the repository:
+- HTML5
+- CSS3
+- JavaScript
+- Python & Flask (optional API)
 
-   ```bash
-   git clone https://github.com/tanshi2003/Rock-Paper-Scisssors.git
-   cd Rock-Paper-Scisssors
-   ```
-2. Open `frontend/index.html` directly in a browser. Or serve it locally:
+## 🚀 Run Locally
 
-   ```bash
-   cd frontend
-   python -m http.server 8000
-   ```
-3. Open **http://localhost:8000**.
+Clone the repository:
 
-## Deploy with GitHub Pages
+```bash
+git clone https://github.com/tanshi2003/Rock-Paper-Scisssors.git
+cd Rock-Paper-Scisssors
+```
 
-This repository keeps the game page and image assets in `frontend/`. GitHub Pages' branch picker doesn't directly publish arbitrary subfolders, so use the included GitHub Actions workflow (`.github/workflows/pages.yml`):
+Open `frontend/index.html` in your browser.
 
+Alternatively, start a local server:
 
-1. Commit and push the workflow to the `main` branch.
-2. In GitHub, open **Settings → Pages** and set **Build and deployment → Source** to **GitHub Actions**.
-3. On the next push to `main`, the workflow deploys the contents of `frontend/`.
-4. Open the Pages URL shown in Settings → Pages. It should be `https://tanshi2003.github.io/Rock-Paper-Scisssors/` for this repository.
+```bash
+cd frontend
+python -m http.server 8000
+```
 
+Then visit `http://localhost:8000`.
 
-## Controls and features
+## 🎯 How to Play
 
-- Click a move or use keyboard keys **1**, **2**, **3** (Rock, Paper, Scissors).
-- Toggle sound with the **Sound** control.
-- **Against the computer:** the computer chooses randomly. Scores remain for the current session.
-- **With a friend:** player one chooses, the selection stays hidden, then the device is handed to player two. Both choices reveal after player two plays.
-- Select **Change mode** to return to the mode picker.
+### Against the Computer
+Choose Rock, Paper, or Scissors. The computer randomly selects its move, and the winner is decided automatically.
 
+### With a Friend
+Player 1 selects a move, passes the device to Player 2, and Player 2 selects their move. Both moves are revealed to determine the winner.
 
-## Optional Flask API
+### Keyboard Controls
 
-The original project includes a small Flask API. The frontend no longer needs it, but it remains available for API experimentation or another client.
+| Key | Move |
+|---|---|
+| `1` | Rock |
+| `2` | Paper |
+| `3` | Scissors |
+| `Esc` | Return to the home screen |
 
-### Install and run
+## ⚙️ Optional Flask API
 
-Python 3.9+ recommended.
+The project also includes a Flask API for experimenting with the game logic independently of the browser frontend.
+
+### Setup
 
 ```bash
 python -m venv .venv
 ```
 
-Activate it:
+Activate the virtual environment:
 
+**Windows PowerShell**
+```powershell
+.venv\Scripts\Activate.ps1
+```
 
-- Windows PowerShell: `.venv\Scripts\Activate.ps1`
-- macOS/Linux: `source .venv/bin/activate`
+**macOS/Linux**
+```bash
+source .venv/bin/activate
+```
 
-Install requirements and start the API:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 python app.py
 ```
 
-API runs at **http://localhost:5000**.
+The API runs at `http://localhost:5000`.
 
-### Endpoint
+### API Endpoint
 
-`POST /play` with JSON body:
+`POST /play`
 
+Request:
 
 ```json
-{"choice":"rock"}
+{
+  "choice": "rock"
+}
 ```
 
-Valid choices are `rock`, `paper`, and `scissors`. Invalid or missing choices return HTTP 400.
+Valid choices: `rock`, `paper`, `scissors`.
 
 Example response:
 
-
 ```json
-{"yourChoice":"rock","computerChoice":"scissors","result":"win"}
+{
+  "yourChoice": "rock",
+  "computerChoice": "scissors",
+  "result": "win"
+}
 ```
 
-## Files
+Invalid or missing choices return HTTP `400`.
+
+## 📁 Project Structure
 
 ```text
-.
-├── app.py                 # Optional Flask API
-├── requirements.txt        # API dependencies only
+Rock-Paper-Scisssors/
+├── app.py
+├── requirements.txt
 ├── README.md
-├── .github/workflows/
-│   └── pages.yml          # GitHub Pages deployment
+├── .github/
+│   └── workflows/
+│       └── pages.yml
 └── frontend/
-    ├── index.html        # Browser game, no build dependencies
-    ├── fist.png         # Rock image
-    ├── peace.png        # Paper image
-    ├── scissors.png     # Scissors image
+    ├── index.html
+    ├── fist.png
+    ├── peace.png
+    ├── scissors.png
     └── rock-paper-scissors.png
 ```
 
-## Dependencies
+## 📦 Dependencies
 
-- **Browser game:** none (plain HTML, CSS, JavaScript)
-- **Optional API:** Python and Flask / Flask-Cors (listed in `requirements.txt`)
+- **Frontend:** No external dependencies
+- **Optional API:** Flask and Flask-Cors
 
-No package manager or bundler is required.
+The browser game uses vanilla HTML, CSS, and JavaScript. No build tools, bundlers, or package managers are required.
